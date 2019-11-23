@@ -191,5 +191,9 @@ namespace MathStop
             parsedEquation = output;
          return isValid;
       }
+      public void parsePostfix()
+      {
+
+      }
    }
 }
