@@ -1,0 +1,15 @@
+D:\Code Files\MathStop\MathStop\obj\Debug\MathStop.csprojAssemblyReference.cache
+D:\Code Files\MathStop\MathStop\obj\Debug\MainWindow.g.cs
+D:\Code Files\MathStop\MathStop\obj\Debug\App.g.cs
+D:\Code Files\MathStop\MathStop\obj\Debug\MathStop_MarkupCompile.cache
+D:\Code Files\MathStop\MathStop\obj\Debug\MathStop_MarkupCompile.lref
+D:\Code Files\MathStop\MathStop\bin\Debug\MathStop.exe.config
+D:\Code Files\MathStop\MathStop\bin\Debug\MathStop.exe
+D:\Code Files\MathStop\MathStop\bin\Debug\MathStop.pdb
+D:\Code Files\MathStop\MathStop\obj\Debug\MainWindow.baml
+D:\Code Files\MathStop\MathStop\obj\Debug\MathStop.g.resources
+D:\Code Files\MathStop\MathStop\obj\Debug\MathStop.Properties.Resources.resources
+D:\Code Files\MathStop\MathStop\obj\Debug\MathStop.csproj.GenerateResource.cache
+D:\Code Files\MathStop\MathStop\obj\Debug\MathStop.csproj.CoreCompileInputs.cache
+D:\Code Files\MathStop\MathStop\obj\Debug\MathStop.exe
+D:\Code Files\MathStop\MathStop\obj\Debug\MathStop.pdb
