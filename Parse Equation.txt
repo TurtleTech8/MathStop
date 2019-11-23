@@ -1,0 +1,67 @@
+We need to parse the equation into several parts to indicate what needs to be evaluated first.
+The idea is to create a tree or list of items that will link everything together.
+
+Operator class
+	string operator
+	int first_number_index
+	
+	Functions
+		Check_Operator
+
+Number class
+	string number
+	int number
+	
+	Functions
+		Add_Numbers
+		Subtract_Numbers
+		Multiply_Numbers
+		Divide_Numbers
+
+Equation Class	
+	List<operator>
+	List<number>
+	string equation
+	
+	Functions
+		Basic functions
+			Add_Operator
+			Add_Number
+			Remove_Operator
+			Remove_Number
+			Add_Variable
+			Remove_Variable
+			Parse_equation
+			Get_equation
+			Output_answer
+			Identify_problem
+				Check_Equation
+		Basic algebra functions
+			Simplify_Equation
+			Solve_Variable
+		Basic Differentiation functions
+			Diff_Equation (class)
+				Identify_structure
+				DPower_Rule
+				DQuotient_Rule
+				DMultiplication_Rule
+				DInverse_Rule
+				DConstant_Multiple_Rule
+				DTrig_Function_Rule
+				DLog_Rule
+				DChain_Rule
+		Basic Integration functions
+			Integrate_Equation (class)
+				Identify_structure
+				IPower_Rule
+				IInverse_Rule
+				IConstant_Multiple_Rule
+				ITrig_Function_Rule
+				ILog_Rule
+				IChain_Rule
+				Solve_Definite_Integral
+				
+			
+		
+		
+	

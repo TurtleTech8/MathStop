@@ -1,0 +1,30 @@
+﻿<Window x:Class="MathStop.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MathStop"
+        mc:Ignorable="d"
+        Title="MathStop" Height="450" Width="800">
+    <Grid>
+        <Button Click="Calculate_Equation" Content="Go" HorizontalAlignment="Left" Margin="623,369,0,0" VerticalAlignment="Top" Width="98" Height="27"/>
+        <TextBox Name="Output" HorizontalAlignment="Left" Height="333" Margin="576,19,0,0" TextWrapping="Wrap" Text="Final Output" VerticalAlignment="Top" Width="198" IsReadOnly="True" Cursor="Arrow" FontSize="14"/>
+        <TextBox Name="Input" HorizontalAlignment="Left" Height="81" Margin="13,320,0,0" TextWrapping="Wrap" Text="Input" VerticalAlignment="Top" Width="546" FontSize="14"/>
+        <Grid HorizontalAlignment="Left" Height="136" Margin="13,172
+              ,0,0" VerticalAlignment="Top" Width="540">
+            <Button Click="Append_Input" Tag="sin()" Content="SIN" HorizontalAlignment="Left" Margin="8,9,0,0" VerticalAlignment="Top" Width="40" Height="33"/>
+            <Button Click="Append_Input" Tag="log()" Content="log" HorizontalAlignment="Left" Margin="60,92,0,0" VerticalAlignment="Top" Width="40" Height="33"/>
+            <Button Click="Append_Input" Tag="ln()" Content="ln" HorizontalAlignment="Left" Margin="60,49,0,0" VerticalAlignment="Top" Width="40" Height="33"/>
+            <Button Click="Append_Input" Tag="sqrt()" Content="sqrt" HorizontalAlignment="Left" Margin="60,9,0,0" VerticalAlignment="Top" Width="40" Height="33"/>
+            <Button Click="Append_Input" Tag="tan()" Content="TAN" HorizontalAlignment="Left" Margin="8,92,0,0" VerticalAlignment="Top" Width="40" Height="33"/>
+            <Button Click="Append_Input" Tag="cos()" Content="COS" HorizontalAlignment="Left" Margin="8,49,0,0" VerticalAlignment="Top" Width="40" Height="33"/>
+        </Grid>
+        <Grid HorizontalAlignment="Left" Height="55" Margin="13,19,0,0" VerticalAlignment="Top" Width="542">
+            <RadioButton Content="Simplify Equation" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top"/>
+            <RadioButton Content="Differentiate Equation" HorizontalAlignment="Left" Margin="125,5,0,0" VerticalAlignment="Top"/>
+            <RadioButton Content="Solve Equation" HorizontalAlignment="Left" Margin="5,35,0,0" VerticalAlignment="Top"/>
+            <RadioButton Content="Integrate Equation" HorizontalAlignment="Left" Margin="125,35,0,0" VerticalAlignment="Top"/>
+        </Grid>
+
+    </Grid>
+</Window>
