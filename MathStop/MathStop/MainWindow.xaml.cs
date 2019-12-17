@@ -30,11 +30,14 @@ namespace MathStop
             Input.SelectionStart = Input.Text.Length - 1;
          }
       }
-      void Calculate_Equation(object sender, RoutedEventArgs e)
+      void Click_Go(object sender, RoutedEventArgs e)
+      {
+         Calculate_Equation();
+      }
+      private void Calculate_Equation()
       {
          string eq = Input.Text;
          MathStop.Equation newEquation = new MathStop.Equation();
-
          newEquation.AddEquation(eq);
          if (newEquation.ParseEquation() == 1)
          {
@@ -44,18 +47,13 @@ namespace MathStop
          {
             Output.Text = "Invalid equation format";
          }
-         //string equation = Input.Text;
-         //foreach(char ch in equation)
-         //{
-         //   if(char.IsDigit(ch))
-         //   {
-
-         //   }
-         //   else
-         //   {
-         //      //IdentifySymbol()
-         //   }
-         //}
+      }
+      private void Enter_Go(object sender, KeyEventArgs e)
+      {
+         if (e.Key == Key.Return)
+         {
+            Calculate_Equation();
+         }
       }
    }
 }

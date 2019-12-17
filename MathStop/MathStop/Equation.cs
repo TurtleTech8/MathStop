@@ -53,7 +53,9 @@ namespace MathStop
          string temp_pop;
          int isValid = 0;
          //Regex rgx = new Regex(@"[(\d*\.?\d+){1}+]");
-         Regex rgx = new Regex(@"[(\d*(\.\d+))\+\*\-\/\(\)]");
+         //equation = String.Join(" ", Regex.Split(equation, @"([\*\+\-\/])"));
+         //([\(\)\*\+\-\/])
+         Regex rgx = new Regex(@"(\d+(?:\.\d+)?)|([\(\)\*\+\-\/])");
          foreach (Match m in rgx.Matches(equation))
          {
             switch (m.Value)
@@ -93,32 +95,32 @@ namespace MathStop
                case "+":
                case "-":
                   isValid = 0;
-                     bool Plusstop = false;
-                     do
+                  bool Plusstop = false;
+                  do
+                  {
+                     try { temp_pop = MStack.Pop(); } catch (InvalidOperationException) { temp_pop = ""; }
+                     switch (temp_pop)
                      {
-                        try { temp_pop = MStack.Pop(); } catch (InvalidOperationException) { temp_pop = ""; }
-                        switch (temp_pop)
-                        {
-                           case "*":
-                           case "/":
-                           case "+":
-                           case "-":
-                              output += temp_pop;
-                              Plusstop = true;
-                              break;
-                           case "(":
-                              MStack.Push("(");
-                              MStack.Push(m.Value);
-                              Plusstop = false;
-                              break;
-                           case "":
-                              MStack.Push(m.Value);
-                              Plusstop = false;
-                              break;
-                           default:
-                              return 0;
-                        }
-                     } while (Plusstop);
+                        case "*":
+                        case "/":
+                        case "+":
+                        case "-":
+                           output += temp_pop;
+                           Plusstop = true;
+                           break;
+                        case "(":
+                           MStack.Push("(");
+                           MStack.Push(m.Value);
+                           Plusstop = false;
+                           break;
+                        case "":
+                           MStack.Push(m.Value);
+                           Plusstop = false;
+                           break;
+                        default:
+                           return 0;
+                     }
+                  } while (Plusstop);
                   break;
                // Closing Parenthesis
                case ")":
@@ -141,6 +143,7 @@ namespace MathStop
                            break;
                         case "":
                            RPStop = false;
+                           isValid = 0;
                            break;
                         default:
                            return 0;
@@ -153,15 +156,18 @@ namespace MathStop
                   MStack.Push("(");
                   break;
                // Some number
-               case string someVal when new Regex(@"(\d*(\.\d+)?)").IsMatch(someVal.ToString()):
+               case string someVal when new Regex(@"(\d+(\.\d+)?)").IsMatch(someVal.ToString()):
                   isValid = 1;
                   output += someVal;
-                  output += " ";
+                  break;
+               // Space
+               case "":
                   break;
                // Default case
                default:
                   return 0;
             }
+            output += " ";
          }
          if (isValid == 1)
          {
