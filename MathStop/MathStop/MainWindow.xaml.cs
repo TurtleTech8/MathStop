@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Equations;
 
 namespace MathStop
 {
@@ -21,6 +22,8 @@ namespace MathStop
       {
          InitializeComponent();
       }
+
+
       void Append_Input(object sender, RoutedEventArgs e)
       {
          Input.AppendText((String)((Button)sender).Tag);
@@ -30,24 +33,26 @@ namespace MathStop
             Input.SelectionStart = Input.Text.Length - 1;
          }
       }
+
+
       void Click_Go(object sender, RoutedEventArgs e)
       {
          Calculate_Equation();
       }
+
+
       private void Calculate_Equation()
       {
-         string eq = Input.Text;
-         MathStop.Equation newEquation = new MathStop.Equation();
-         newEquation.AddEquation(eq);
-         if (newEquation.ParseEquation() == 1)
-         {
-            Output.Text = newEquation.GetParsedEquation();
-         }
-         else
-         {
-            Output.Text = "Invalid equation format";
-         }
+         string eq = Input.Text,
+                left = eq.Split('=')[0],
+                right = eq.Split('=')[1];
+         //Output.Text = Equation.ParseStatement(left);
+         Output.Text = string.Format("{0} = {1}", Equation.Solve(Equation.ParseStatement(left)), right);
       }
+
+      //*********************************************************
+      //                Key press functions
+      //*********************************************************
       private void Enter_Go(object sender, KeyEventArgs e)
       {
          if (e.Key == Key.Return)
