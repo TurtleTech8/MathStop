@@ -1,0 +1,40 @@
+//*********************************************************
+//                Solve an equation
+//*********************************************************
+      public static double Solve(string left, string right)
+      {
+         Stack<double> PDA = new Stack<double>();
+         Regex rgx = new Regex(@"([\(\)\*\+\-\/])|[A-Za-z]|(\d+(?:\.\d+)?)");
+         double temp = 0;
+         foreach (Match m in rgx.Matches(left))
+         {
+            switch (m.Value)
+            {
+               // Some Number
+               case string someNum when new Regex(@"(\d+(?:\.\d+)?)").IsMatch(someNum.ToString()):
+                  PDA.Push(double.Parse(someNum));
+                  break;
+               // Addition
+               case "+":
+                  temp = PDA.Pop();
+                  PDA.Push(PDA.Pop() + temp);
+                  break;
+               // Subtraction
+               case "-":
+                  temp = PDA.Pop();
+                  PDA.Push(PDA.Pop() - temp);
+                  break;
+               // Multiplication
+               case "*":
+                  temp = PDA.Pop();
+                  PDA.Push(PDA.Pop() * temp);
+                  break;
+               // Division
+               case "/":
+                  temp = PDA.Pop();
+                  PDA.Push(PDA.Pop() / temp);
+                  break;
+            }
+         }
+         return PDA.Pop();
+      }

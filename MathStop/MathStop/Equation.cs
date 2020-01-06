@@ -5,8 +5,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using MathStop_Extensions;
 
-namespace Equations
+namespace MathStop_Equation
 {
    class Equation
    {
@@ -178,9 +179,9 @@ namespace Equations
       }
 
 //*********************************************************
-//                Solve a statement
+//                Simplify a statement
 //*********************************************************
-      public static string Solve(string input)
+      public static string Simplify(string input)
       {
          Stack<string> PDA = new Stack<string>();
          Regex rgx = new Regex(@"([\(\)\*\+\-\/])|[A-Za-z]|(\d+(?:\.\d+)?)");
@@ -199,12 +200,17 @@ namespace Equations
                case "+":
                   right = PDA.Pop();
                   left = PDA.Pop();
-                  if (Double.TryParse(left, out dLeft) && Double.TryParse(right, out dRight))
+                  // Number and number
+                  if (Double.TryParse(left.Remove_Parentheses(), out dLeft) && Double.TryParse(right.Remove_Parentheses(), out dRight))
                      PDA.Push((dLeft + dRight).ToString());
+                  // Polynomial and polynomial
+                  // Polynomial and number
                   else if (left.Contains("+") || left.Contains("-"))
                   {
                      PDA.Push(solveMidStatement(right, left, "+", "l"));
                   }
+                  // Variable and variable of same powers
+                  // Number and variable
                   else
                   {
                      PDA.Push(string.Format("{0} {1} +", left, right));
@@ -214,7 +220,7 @@ namespace Equations
                case "-":
                   right = PDA.Pop();
                   left = PDA.Pop();
-                  if (Double.TryParse(left, out dLeft) && Double.TryParse(right, out dRight))
+                  if (Double.TryParse(left.Remove_Parentheses(), out dLeft) && Double.TryParse(right.Remove_Parentheses(), out dRight))
                      PDA.Push((dLeft - dRight).ToString());
                   else if (left.Contains("+") || left.Contains("-"))
                   {
@@ -222,29 +228,34 @@ namespace Equations
                   }
                   else
                   {
-                     PDA.Push(string.Format("{0} {1} -", left, right));
+                     PDA.Push(string.Format("{0} {1} -", left.Remove_Parentheses(), right.Remove_Parentheses()));
                   }
                   break;
                // Multiplication
                case "*":
                   right = PDA.Pop();
                   left = PDA.Pop();
-                  if (Double.TryParse(left, out dLeft) && Double.TryParse(right, out dRight))
+                  // Number and number
+                  if (Double.TryParse(left.Remove_Parentheses(), out dLeft) && Double.TryParse(right.Remove_Parentheses(), out dRight))
                      PDA.Push((dLeft * dRight).ToString());
-                  else if (right.Contains("+") || right.Contains("-"))
+                  // Polynomial and polynomial
+                  // Polynomial and number (Distribute) 2 * (5*x^2 + 3*x + 4) => ([x 2 ^] 5 *) (x 3 *) + 4 + 2 *
+                  else if (right.Contains("+") || right.Contains("-") || right.Contains("*"))
                   {
                      PDA.Push(solveMidStatement(right, left, "*", "r"));
                   }
+                  // Variable and variable of same powers
+                  // Number and variable
                   else
                   {
-                     PDA.Push(string.Format("{0} {1} *", left, right));
+                     PDA.Push(string.Format("({0} {1} *)", left.Remove_Parentheses(), right.Remove_Parentheses()));
                   }
                   break;
                // Division
                case "/":
                   right = PDA.Pop();
                   left = PDA.Pop();
-                  if (Double.TryParse(left, out dLeft) && Double.TryParse(right, out dRight))
+                  if (Double.TryParse(left.Remove_Parentheses(), out dLeft) && Double.TryParse(right.Remove_Parentheses(), out dRight))
                      PDA.Push((dLeft / dRight).ToString());
                   else if (right.Contains("+") || right.Contains("-"))
                   {
@@ -252,7 +263,7 @@ namespace Equations
                   }
                   else
                   {
-                     PDA.Push(string.Format("{0} {1} /", left, right));
+                     PDA.Push(string.Format("({0} {1} /)", left.Remove_Parentheses(), right.Remove_Parentheses()));
                   }
                   break;
             }
@@ -261,65 +272,28 @@ namespace Equations
          return PDA.Pop();
       }
 
-//*********************************************************
-//                Solve an equation
-//*********************************************************
-      public static double Solve(string left, string right)
-      {
-         Stack<double> PDA = new Stack<double>();
-         Regex rgx = new Regex(@"([\(\)\*\+\-\/])|[A-Za-z]|(\d+(?:\.\d+)?)");
-         double temp = 0;
-         foreach (Match m in rgx.Matches(left))
-         {
-            switch (m.Value)
-            {
-               // Some Number
-               case string someNum when new Regex(@"(\d+(?:\.\d+)?)").IsMatch(someNum.ToString()):
-                  PDA.Push(double.Parse(someNum));
-                  break;
-               // Addition
-               case "+":
-                  temp = PDA.Pop();
-                  PDA.Push(PDA.Pop() + temp);
-                  break;
-               // Subtraction
-               case "-":
-                  temp = PDA.Pop();
-                  PDA.Push(PDA.Pop() - temp);
-                  break;
-               // Multiplication
-               case "*":
-                  temp = PDA.Pop();
-                  PDA.Push(PDA.Pop() * temp);
-                  break;
-               // Division
-               case "/":
-                  temp = PDA.Pop();
-                  PDA.Push(PDA.Pop() / temp);
-                  break;
-            }
-         }
-         return PDA.Pop();
-      }
-
+      //*********************************************************
+      //                Solve a small statement
+      //*********************************************************
       private static string solveMidStatement(string right, string left, string oper, string side)
       {
          string expression = string.Empty,
                 temp = string.Empty,
-                rgx = @"((\d+(?:\.\d+)?) [A-Za-z] [*/])|([A-Za-z] (\d+(?:\.\d+)?) [*/])|[A-Za-z]";
+                rgx = @"([(](\d+(?:\.\d+)?) [A-Za-z] [*/][)])|([(][A-Za-z] (\d+(?:\.\d+)?) [*/][)])|[(][A-Za-z][)]";
          double dLeft = 0,
                 dRight = 0;
-         switch()
+         switch(side)
          {
             case "l":
                dRight = double.Parse(right);
                switch (oper)
                {
+                  // (5*x+4) + 2
                   case "+":
                   case "-":
                      temp = Regex.Match(left, rgx).Value;
                      Debug.WriteLine("ss");
-                     Debug.WriteLine(temp);
+                     Debug.WriteLine(left);
                      expression = Regex.Replace(left, rgx, "~");
                      if(expression.StartsWith("~"))
                      {
@@ -343,11 +317,10 @@ namespace Equations
                dLeft = double.Parse(left);
                switch (oper)
                {
+                  // 2 + (5x+4)
                   case "+":
                   case "-":
                      temp = Regex.Match(right, rgx).Value;
-                     Debug.WriteLine("ss");
-                     Debug.WriteLine(temp);
                      expression = Regex.Replace(right, rgx, "~");
                      if (expression.StartsWith("~"))
                      {
@@ -357,7 +330,6 @@ namespace Equations
                      else
                      {
                         dRight = double.Parse(expression.Split(' ')[0]);
-                        Debug.WriteLine(dLeft);
                         expression = (oper == "-" ? string.Format("{0}", dLeft - dRight) : string.Format("{0}", dLeft + dRight)) + " " + temp + " " + expression.Split(' ')[2];
                      }
                      break;
@@ -370,8 +342,108 @@ namespace Equations
                }
                break;
          }
-         Debug.WriteLine(expression);
-         Debug.WriteLine("ee");
+         return expression;
+      }
+
+      //*********************************************************
+      //          Distribute a number to a polynomial
+      //*********************************************************
+      public static string Distribute(string right, string left, string oper, string side)
+      {
+         double dLeft = 0,
+                dRight = 0;
+         string expression = string.Empty,
+                pattern = @"\[(.*?)\]|[A-Za-z]",
+                parPattern = @"\((.*?)\)";
+         Match patternMatch,
+               parPatternMatch;
+         Regex rgx = new Regex(pattern);
+         Regex parRgx = new Regex(parPattern);
+
+         switch (side)
+         {
+            // If the number is on the left side of the polynomial
+            case "r":
+               switch (oper)
+               {
+                  // 2 * (5*x + 4)
+                  case "*":
+                     dLeft = double.Parse(left);
+                     expression = right;
+                     foreach (Match x in Regex.Matches(right, pattern)) { expression = expression.Replace(x.Value, ""); }
+                     patternMatch = rgx.Match(right);
+                     parPatternMatch = parRgx.Match(expression);
+                     while (patternMatch.Success)
+                     {
+                        switch (parPatternMatch.Value.Split(' ')[2])
+                        {
+                           case "*)":
+                              expression = expression.Replace(parPatternMatch.Value, string.Format("({0} {1} *)", patternMatch.Value, dLeft * double.Parse(parPatternMatch.Value.Split(' ')[1])));
+                              break;
+                           case "/)":
+                              expression = expression.Replace(parPatternMatch.Value, string.Format("({0} {1} *)", patternMatch.Value, dLeft / double.Parse(parPatternMatch.Value.Split(' ')[1])));
+                              break;
+                        }
+                        patternMatch = patternMatch.NextMatch();
+                        parPatternMatch = parPatternMatch.NextMatch();
+                     }
+                     break;
+                  // 2 / (5*x + 4) -- More complicated
+                  case "/":
+                     break;
+               }
+               break;
+            // If the number is on the right side of the polynomial
+            case "l":
+               switch (oper)
+               {
+                  // (5*x + 4) * 2
+                  case "*":
+                     dRight = double.Parse(right);
+                     expression = left;
+                     foreach (Match x in Regex.Matches(left, pattern)) { expression = expression.Replace(x.Value, ""); }
+                     patternMatch = rgx.Match(left);
+                     parPatternMatch = parRgx.Match(expression);
+                     while (patternMatch.Success)
+                     {
+                        switch (parPatternMatch.Value.Split(' ')[2])
+                        {
+                           case "*)":
+                              expression = expression.Replace(parPatternMatch.Value, string.Format("({0} {1} *)", patternMatch.Value, double.Parse(parPatternMatch.Value.Split(' ')[1]) * dRight));
+                              break;
+                           case "/)":
+                              expression = expression.Replace(parPatternMatch.Value, string.Format("({0} {1} *)", patternMatch.Value, double.Parse(parPatternMatch.Value.Split(' ')[1]) / dRight));
+                              break;
+                        }
+                        patternMatch = patternMatch.NextMatch();
+                        parPatternMatch = parPatternMatch.NextMatch();
+                     }
+                     break;
+                  // (5/x + 4) / 2
+                  case "/":
+                     dRight = double.Parse(right);
+                     expression = left;
+                     foreach (Match x in Regex.Matches(left, pattern)) { expression = expression.Replace(x.Value, ""); }
+                     patternMatch = rgx.Match(left);
+                     parPatternMatch = parRgx.Match(expression);
+                     while (patternMatch.Success)
+                     {
+                        switch (parPatternMatch.Value.Split(' ')[2])
+                        {
+                           case "*)":
+                              expression = expression.Replace(parPatternMatch.Value, string.Format("({0} {1} *)", patternMatch.Value, double.Parse(parPatternMatch.Value.Split(' ')[1]) / dRight));
+                              break;
+                           case "/)":
+                              expression = expression.Replace(parPatternMatch.Value, string.Format("({0} {1} *)", patternMatch.Value, dRight / double.Parse(parPatternMatch.Value.Split(' ')[1])));
+                              break;
+                        }
+                        patternMatch = patternMatch.NextMatch();
+                        parPatternMatch = parPatternMatch.NextMatch();
+                     }
+                     break;
+               }
+               break;
+         }
          return expression;
       }
    }

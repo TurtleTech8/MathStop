@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Equations;
+using MathStop_Equation;
 
 namespace MathStop
 {
@@ -45,9 +45,10 @@ namespace MathStop
       {
          string eq = Input.Text,
                 left = eq.Split('=')[0],
-                right = eq.Split('=')[1];
+                right = "2";
          //Output.Text = Equation.ParseStatement(left);
-         Output.Text = string.Format("{0} = {1}", Equation.Solve(Equation.ParseStatement(left)), right);
+         //Output.Text = string.Format("{0} = {1}", Equation.Simplify(Equation.ParseStatement(left)), right);
+         Output.Text = Equation.Distribute(right, left, "/", "l");
       }
 
       //*********************************************************

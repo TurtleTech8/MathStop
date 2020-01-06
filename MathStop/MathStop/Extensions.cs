@@ -5,23 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
-namespace MathStop
+namespace MathStop_Extensions
 {
-   class Extensions
+   static class Extensions
    {
-      public static bool IsNumber(string number)
+      public static string Remove_Parentheses(this string input)
       {
-         return Regex.IsMatch(number, @"^\d+$");
-      }
-
-      public static bool IsOperator(string input)
-      {
-         return Regex.IsMatch(input, @"*/-\+");
-      }
-
-      public static bool IsParenthesis(string input)
-      {
-         return Regex.IsMatch(input, @"\(\)");
+         try { return input.Replace("(", "").Replace(")", ""); }
+         catch { return input; }
       }
    }
 }
