@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MathStop_Equation;
 
 namespace MathStop
 {
@@ -21,6 +22,8 @@ namespace MathStop
       {
          InitializeComponent();
       }
+
+
       void Append_Input(object sender, RoutedEventArgs e)
       {
          Input.AppendText((String)((Button)sender).Tag);
@@ -30,32 +33,33 @@ namespace MathStop
             Input.SelectionStart = Input.Text.Length - 1;
          }
       }
-      void Calculate_Equation(object sender, RoutedEventArgs e)
+
+
+      void Click_Go(object sender, RoutedEventArgs e)
       {
-         string eq = Input.Text;
-         MathStop.Equation newEquation = new MathStop.Equation();
+         Calculate_Equation();
+      }
 
-         newEquation.AddEquation(eq);
-         if (newEquation.ParseEquation() == 1)
-         {
-            Output.Text = newEquation.GetParsedEquation();
-         }
-         else
-         {
-            Output.Text = "Invalid equation format";
-         }
-         //string equation = Input.Text;
-         //foreach(char ch in equation)
-         //{
-         //   if(char.IsDigit(ch))
-         //   {
 
-         //   }
-         //   else
-         //   {
-         //      //IdentifySymbol()
-         //   }
-         //}
+      private void Calculate_Equation()
+      {
+         string eq = Input.Text,
+                left = eq.Split('=')[0],
+                right = "2";
+         //Output.Text = Equation.ParseStatement(left);
+         //Output.Text = string.Format("{0} = {1}", Equation.Simplify(Equation.ParseStatement(left)), right);
+         Output.Text = Equation.Distribute(right, left, "/", "l");
+      }
+
+      //*********************************************************
+      //                Key press functions
+      //*********************************************************
+      private void Enter_Go(object sender, KeyEventArgs e)
+      {
+         if (e.Key == Key.Return)
+         {
+            Calculate_Equation();
+         }
       }
    }
 }

@@ -7,9 +7,9 @@
         mc:Ignorable="d"
         Title="MathStop" Height="450" Width="800">
     <Grid>
-        <Button Click="Calculate_Equation" Content="Go" HorizontalAlignment="Left" Margin="623,369,0,0" VerticalAlignment="Top" Width="98" Height="27"/>
+        <Button Click="Click_Go" Content="Go" HorizontalAlignment="Left" Margin="623,369,0,0" VerticalAlignment="Top" Width="98" Height="27"/>
         <TextBox Name="Output" HorizontalAlignment="Left" Height="333" Margin="576,19,0,0" TextWrapping="Wrap" Text="Final Output" VerticalAlignment="Top" Width="198" IsReadOnly="True" Cursor="Arrow" FontSize="14"/>
-        <TextBox Name="Input" HorizontalAlignment="Left" Height="81" Margin="13,320,0,0" TextWrapping="Wrap" Text="Input" VerticalAlignment="Top" Width="546" FontSize="14"/>
+        <TextBox Name="Input" KeyDown="Enter_Go" HorizontalAlignment="Left" Height="81" Margin="13,320,0,0" TextWrapping="Wrap" Text="Input" VerticalAlignment="Top" Width="546" FontSize="14"/>
         <Grid HorizontalAlignment="Left" Height="136" Margin="13,172
               ,0,0" VerticalAlignment="Top" Width="540">
             <Button Click="Append_Input" Tag="sin()" Content="SIN" HorizontalAlignment="Left" Margin="8,9,0,0" VerticalAlignment="Top" Width="40" Height="33"/>
